@@ -1,40 +1,84 @@
-import React from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  Button,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+  Keyboard,
+} from "react-native";
 import Card from "../components/card";
 import Colors from "../constants/colors";
 import Input from "../components/input";
 
 export default function StartGameScreen() {
+  const [enteredValue, setEnteredValue] = useState("");
+  const [confirmed, setConfirmed] = useState(false);
+  const [selectedNumber, setSelectedNumber] = useState(0);
+
+  const numberInputHandler = (
+    inputText: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
+    let inputTextValue = inputText.nativeEvent.text;
+    let regEx = new RegExp("^[0-9]*$"); // Only numbers
+    if (regEx.test(inputTextValue)) {
+      //If we are only dealing with numbers
+      setEnteredValue(inputTextValue);
+    }
+    //If there are other values other than numbers, dont change
+  };
+
+  const confirmInputHandler = () => {
+    const chosenNumber = parseInt(enteredValue);
+    if (chosenNumber === NaN || chosenNumber <= 0 || chosenNumber > 99) {
+      return;
+    }
+    setConfirmed(true);
+    setSelectedNumber(chosenNumber);
+    setEnteredValue("");
+  };
+
   return (
-    <View style={styles.screen}>
-      <Text style={styles.title}>Start a New Game!</Text>
-      <Card style={styles.inputContainer}>
-        <Text>Select a Number</Text>
-        <Input
-          placeholder="9"
-          style={styles.input}
-          autoCorrect={false}
-          keyboardType="number-pad"
-          maxLength={2}
-        />
-        <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Button
-              title="Reset"
-              onPress={() => {}}
-              color={Colors.accent}
-            ></Button>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.screen}>
+        <Text style={styles.title}>Start a New Game!</Text>
+        <Card style={styles.inputContainer}>
+          <Text>Select a Number</Text>
+          <Input
+            placeholder="9"
+            style={styles.input}
+            autoCorrect={false}
+            keyboardType="number-pad"
+            maxLength={2}
+            onChange={numberInputHandler}
+            value={enteredValue}
+          />
+          <View style={styles.buttonContainer}>
+            <View style={styles.button}>
+              <Button
+                title="Reset"
+                onPress={() => {
+                  setEnteredValue("");
+                  setConfirmed(false);
+                }}
+                color={Colors.accent}
+              ></Button>
+            </View>
+            <View style={styles.button}>
+              <Button
+                title="Confirm"
+                onPress={() => {
+                  confirmInputHandler;
+                }}
+                color={Colors.primary}
+              ></Button>
+            </View>
           </View>
-          <View style={styles.button}>
-            <Button
-              title="Confirm"
-              onPress={() => {}}
-              color={Colors.primary}
-            ></Button>
-          </View>
-        </View>
-      </Card>
-    </View>
+        </Card>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
