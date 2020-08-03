@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ElementType } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,10 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   Keyboard,
+  Constructor,
+  NativeMethodsMixinType,
+  TextComponent,
+  Alert,
 } from "react-native";
 import Card from "../components/card";
 import Colors from "../constants/colors";
@@ -32,13 +36,84 @@ export default function StartGameScreen() {
 
   const confirmInputHandler = () => {
     const chosenNumber = parseInt(enteredValue);
-    if (chosenNumber === NaN || chosenNumber <= 0 || chosenNumber > 99) {
+    if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+      Alert.alert(
+        "Invalid Number",
+        "Number has to be a number between 1 and 99",
+        [
+          {
+            text: "Okay",
+            style: "destructive",
+            onPress: () => {
+              setEnteredValue("");
+            },
+          },
+        ]
+      );
+      setConfirmed(false);
       return;
     }
     setConfirmed(true);
     setSelectedNumber(chosenNumber);
-    setEnteredValue("");
   };
+
+  let confirmedOutput = <Text></Text>;
+
+  if (confirmed) {
+    confirmedOutput = (
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <View
+          style={{
+            backgroundColor: "#fff",
+
+            //borderWidth: 1,
+            borderRadius: 20,
+            shadowColor: "black",
+            shadowOpacity: 0.8,
+            shadowOffset: { width: 10, height: 0 },
+            shadowRadius: 30,
+            elevation: 40,
+          }}
+        >
+          <View style={{ margin: 20 }}>
+            <Text style={{ paddingBottom: 5, fontSize: 28 }}>
+              Your number is:
+            </Text>
+            <Text
+              style={{
+                fontSize: 36,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {enteredValue}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "100%",
+              height: 40,
+              justifyContent: "center",
+              backgroundColor: "#22B07D",
+              borderBottomLeftRadius: 20,
+              borderBottomRightRadius: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: "white",
+                textAlign: "center",
+              }}
+            >
+              START GAME
+            </Text>
+            {/* <Button title="Start Game" onPress={() => {}}></Button> */}
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -69,14 +144,13 @@ export default function StartGameScreen() {
             <View style={styles.button}>
               <Button
                 title="Confirm"
-                onPress={() => {
-                  confirmInputHandler;
-                }}
+                onPress={confirmInputHandler}
                 color={Colors.primary}
               ></Button>
             </View>
           </View>
         </Card>
+        {confirmedOutput}
       </View>
     </TouchableWithoutFeedback>
   );
