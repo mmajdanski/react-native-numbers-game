@@ -14,7 +14,12 @@ export default function App() {
 
   let content = <StartGameScreen onStartGame={startGameHandler} />;
   if (selectedNumber > 0) {
-    content = <GameScreen enteredValue={selectedNumber} />;
+    content = (
+      <GameScreen
+        enteredValue={selectedNumber}
+        resetGame={() => startGameHandler(0)}
+      />
+    );
   }
 
   return (
