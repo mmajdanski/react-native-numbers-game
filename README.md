@@ -1,4 +1,4 @@
-# Simple React-Native Todo
+# Simple React-Native Numbers Game (Typescript)
 
 This is an extremely simple React-Native application that just shows a few of the built-in components in React-Native (with some custom components and styling added).
 
