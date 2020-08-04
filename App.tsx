@@ -1,14 +1,26 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Header from "./components/header";
 import StartGameScreen from "./screens/startGame";
+import GameScreen from "./screens/game";
 
 export default function App() {
+  const [selectedNumber, setSelectedNumber] = useState(0);
+
+  const startGameHandler = (selectedNumber: number) => {
+    setSelectedNumber(selectedNumber);
+  };
+
+  let content = <StartGameScreen onStartGame={startGameHandler} />;
+  if (selectedNumber > 0) {
+    content = <GameScreen enteredValue={selectedNumber} />;
+  }
+
   return (
     <View style={styles.screen}>
       <Header title={"Guess a Number"} />
-      <StartGameScreen />
+      {content}
     </View>
   );
 }

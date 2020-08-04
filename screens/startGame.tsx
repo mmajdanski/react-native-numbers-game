@@ -8,16 +8,18 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   Keyboard,
-  Constructor,
-  NativeMethodsMixinType,
-  TextComponent,
   Alert,
 } from "react-native";
 import Card from "../components/card";
 import Colors from "../constants/colors";
 import Input from "../components/input";
+import NumberCard from "../components/numberCard";
 
-export default function StartGameScreen() {
+interface Props {
+  onStartGame: (selectedNumber: number) => void;
+}
+
+export default function StartGameScreen(props: Props) {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(0);
@@ -61,57 +63,10 @@ export default function StartGameScreen() {
 
   if (confirmed) {
     confirmedOutput = (
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <View
-          style={{
-            backgroundColor: "#fff",
-
-            //borderWidth: 1,
-            borderRadius: 20,
-            shadowColor: "black",
-            shadowOpacity: 0.8,
-            shadowOffset: { width: 10, height: 0 },
-            shadowRadius: 30,
-            elevation: 40,
-          }}
-        >
-          <View style={{ margin: 20 }}>
-            <Text style={{ paddingBottom: 5, fontSize: 28 }}>
-              Your number is:
-            </Text>
-            <Text
-              style={{
-                fontSize: 36,
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
-              {enteredValue}
-            </Text>
-          </View>
-          <View
-            style={{
-              width: "100%",
-              height: 40,
-              justifyContent: "center",
-              backgroundColor: "#22B07D",
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "bold",
-                color: "white",
-                textAlign: "center",
-              }}
-            >
-              START GAME
-            </Text>
-            {/* <Button title="Start Game" onPress={() => {}}></Button> */}
-          </View>
-        </View>
-      </View>
+      <NumberCard
+        onStartGame={props.onStartGame}
+        enteredValue={selectedNumber}
+      />
     );
   }
 
